@@ -1,0 +1,51 @@
+name: Apptainer Build Deploy
+
+on:
+  pull_request:
+  push:
+    branches: main
+
+jobs:
+  changes:
+    name: "Changed Apptainer Recipes"
+    runs-on: ubuntu-latest
+    outputs:
+      changed_file: ${{ steps.files.outputs.added_modified }}
+    steps:
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+        with:
+          format: 'json'
+          
+  build-test-containers:
+    needs:
+      - changes
+    runs-on: ubuntu-latest
+    strategy:
+      fail-test: false
+      matrix:
+        changed_file: ${{ fromJSON(needs.changes.outputs.changed_file) }}
+
+    name: Check ${{ matrix.changed_file }}
+    permissions:
+      contents: read
+      packages: write
+
+    container:
+        image: quay.io/singularity/singularity
+        options: --privileged
+    steps:
+
+      - name: Check out code for the container builds
+        uses: actions/checkout@v4
+
+      - name: Build Container
+        env:
+          recipe: ${{ matrix.changed_file }}
+        run: |
+           singularity build ${{matrix.changed_file}}.sif ${{matrix.changed_file}}
+
+      - name: Login and Deploy Container
+        run: |
+           echo ${{ secrets.GITHUB_TOKEN }} | singularity remote login -u ${{ secrets.GHCR_USERNAME }} --password-stdin oras://ghcr.io
+           singularity push container.sif oras://ghcr.io/${GITHUB_REPOSITORY}:${tag}
