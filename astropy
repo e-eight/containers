@@ -2,7 +2,7 @@ Bootstrap: docker
 From: python:3.10-slim-bookworm
 
 %post
-  pip install astropy
+  pip install ipython astropy
 
 %runscript
-  python
+  ipython
