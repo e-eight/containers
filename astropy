@@ -2,7 +2,13 @@ Bootstrap: docker
 From: python:3.10-slim-bookworm
 
 %post
-  pip install ipython astropy
+  pip install pip-tools
+  echo "ipython" >> requirements.in
+  echo "matplotlib" >> requirements.in
+  echo "astropy" >> requirements.in
+  pip-compile requirements.in
+  pip-sync requirements.txt
+  rm requirements*
 
 %runscript
   ipython
