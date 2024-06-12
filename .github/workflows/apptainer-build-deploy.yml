@@ -22,7 +22,7 @@ jobs:
       - changes
     runs-on: ubuntu-latest
     strategy:
-      fail-test: false
+      fail-fast: false
       matrix:
         changed_file: ${{ fromJSON(needs.changes.outputs.changed_file) }}
 
