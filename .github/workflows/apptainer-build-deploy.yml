@@ -32,7 +32,7 @@ jobs:
       packages: write
 
     container:
-        image: quay.io/singularity/singularity
+        image: quay.io/singularity/singularity:v4.1.0
         options: --privileged
     steps:
 
