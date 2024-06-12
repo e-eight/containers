@@ -47,5 +47,5 @@ jobs:
 
       - name: Login and Deploy Container
         run: |
-           echo ${{ secrets.GITHUB_TOKEN }} | singularity remote login -u ${{ secrets.GHCR_USERNAME }} --password-stdin oras://ghcr.io
-           singularity push container.sif oras://ghcr.io/${GITHUB_REPOSITORY}:${tag}
+           echo ${{ secrets.GITHUB_TOKEN }} | singularity remote login -u ${{ secrets.GHCR_USERNAME }} --password-stdin ghcr.io
+           singularity push ${{matrix.changed_file}}.sif ghcr.io/${GITHUB_REPOSITORY}:${tag}
