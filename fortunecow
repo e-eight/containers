@@ -1,0 +1,11 @@
+Bootstrap: docker
+From: debian:bookworm-slim
+
+%post
+  apt update -y && apt install -y fortune cowsay
+
+%environment
+  export PATH=/usr/games:$PATH
+  
+%runscript
+  /usr/games/fortune|/usr/games/cowsay
