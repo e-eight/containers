@@ -10,10 +10,10 @@ jobs:
     name: "Changed Apptainer Recipes"
     runs-on: ubuntu-latest
     outputs:
-      changed_file: ${{ steps.files.outputs.all_changed_and_modified_files }}
+      changed_file: ${{ steps.files.outputs.all }}
     steps:
       - id: files
-        uses: tj-actions/changed-files@v44
+        uses: masesgroup/retrieve-changed-files@v3
         with:
           format: 'json'
           
