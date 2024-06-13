@@ -12,3 +12,6 @@ From: python:3.10-slim-bookworm
 
 %runscript
   ipython
+
+%labels
+  OWNER Soham
