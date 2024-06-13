@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: debian:slim-bookworm
+From: debian:bookworm-slim
 
 %post
   apt install -y nyancat
