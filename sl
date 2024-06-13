@@ -5,4 +5,4 @@ From: debian:bookworm
   apt update -y && apt install -y sl
 
 %runscript
-  sl
+  /usr/games/sl
