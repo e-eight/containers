@@ -2,7 +2,7 @@ Bootstrap: docker
 From: rocker/rstudio:4.3.2
 
 %post
-  apt update -y && apt install -y zlib1g-dev && apt clean && rm -rf /var/lib/apt/lists/*
+  apt update -y && apt install -y zlib1g-dev hdf5-helpers && apt clean && rm -rf /var/lib/apt/lists/*
   R -e 'install.packages("BiocManager")'
   R -e 'BiocManager::install(c("GenomeInfoDb", "GenomicRanges", "IRanges", "Rsamtools", "S4Vectors", "BiocGenerics"))'
   R -e 'setRepositories(ind=1:3); install.packages(c("Signac", "Signac", "ggpubr", "hdf5r"))'
