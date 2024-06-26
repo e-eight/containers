@@ -3,12 +3,8 @@ From: rocker/rstudio:4.3.2
 
 %post
   apt update -y
-  apt install -y --no-install-recommends \
-      r-cran-hdf5r r-cran-ggpubr r-cran-biocmanager r-bioc-genomeinfodb \
-      r-bioc-genomicranges r-bioc-iranges r-bioc-rsamtools r-bioc-s4vectors \
-      r-bioc-biocgenerics r-bioc-dropletutils r-bioc-scater r-bioc-glmgampoi \
-      r-bioc-singler
-  apt install -y && apt clean && rm -rf /var/lib/apt/lists/*
+  apt install -y --no-install-recommends r-cran-* r-bioc-*
+  apt clean && rm -rf /var/lib/apt/lists/*
   R -e 'setRepositories(ind=1:3); install.packages(c("Signac", "Seurat"))'
 
 %runscript
