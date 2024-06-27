@@ -1,0 +1,15 @@
+Bootstrap: docker
+From: rocker/rstudio:4.3.2
+
+%post
+  apt update -y
+  apt install -y --no-install-recommends r-cran-seurat* r-cran-biocmanagers
+  for pkg in GenomeInfoDb GenomicRanges IRanges Ramtools S4Vectors BiocGenerics
+  do
+    R -e 'BiocManager::install("$pkg")'
+  done
+  R -e 'install.packages("Signac")'
+  apt clean && rm -rf /var/lib/apt/lists/*  
+
+%runscript
+  /usr/bin/R
