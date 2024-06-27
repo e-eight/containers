@@ -5,7 +5,7 @@ Stage: base
 %post
   apt update -y
   apt install -y --no-install-recommends r-cran-seurat* r-cran-biocmanager
-  for pkg in genomicinfodb genomicranges iranges rsamtools s4vectors biocgenerics
+  for pkg in genomeinfodb genomicranges iranges rsamtools s4vectors biocgenerics
   do
     apt install -y --no-install-recommends r-bioc-$pkg
   done
