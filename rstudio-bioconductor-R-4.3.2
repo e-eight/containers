@@ -3,9 +3,13 @@ From: rocker/rstudio:4.3.2
 
 %post
   apt update -y
-  apt install -y --no-install-recommends r-cran-* r-bioc-*
+  apt install -y --no-install-recommends r-cran-seurat*
+  for pkg in genomeinfodb genomicranges iranges rsamtools s4vectors biocgenerics
+  do
+    apt install -y r-bioc-$pkg
+  done
   apt clean && rm -rf /var/lib/apt/lists/*
-  R -e 'setRepositories(ind=1:3); install.packages(c("Signac", "Seurat"))'
+  R -e 'install.packages("Signac")'
 
 %runscript
   /usr/bin/R
