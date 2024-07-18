@@ -3,7 +3,7 @@ From: rocker/rstudio:4.3.2
 
 %post
   apt update -y
-  apt install -y --no-install-recommends liblzma-dev libhdf5-dev libbz2-dev patch
+  apt install -y --no-install-recommends liblzma-dev libhdf5-dev libbz2-dev patch zlib1g-dev
 
   export R_LIBS_USER=/usr/lib/R/site-library
 
@@ -15,4 +15,4 @@ From: rocker/rstudio:4.3.2
   apt clean && rm -rf /var/lib/apt/lists/*
 
 %runscript
-  /usr/bin/R
+  R
