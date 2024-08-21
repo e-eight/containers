@@ -1,0 +1,58 @@
+Bootstrap: docker
+From: rocker/rstudio:4.3.2
+
+%files
+NGS_primerplex.py /opt/NGS_primerplex.py
+
+%post
+  apt update -y
+  apt install -y --no-install-recommends libbz2-dev zlib1g-dev libncurses5-dev libncursesw5-dev liblzma-dev
+  apt install -y --no-install-recommends wget ruby-full vcftools plink2 bzip2 default-jre default-jdk git bwa python3-pip
+
+  cd /opt
+  mkdir bin
+  
+  wget https://github.com/samtools/htslib/releases/download/1.20/htslib-1.20.tar.bz2
+  tar -vxjf htslib-1.20.tar.bz2
+  cd htslib-1.20
+  ./configure --prefix=/opt
+  make
+  make install
+  cd ..
+  
+  wget https://github.com/samtools/samtools/releases/download/1.20/samtools-1.20.tar.bz2
+  tar -vxjf samtools-1.20.tar.bz2
+  cd samtools-1.20
+  ./configure --prefix=/opt
+  make
+  make install
+  cd ..
+  
+  wget https://github.com/samtools/bcftools/releases/download/1.20/bcftools-1.20.tar.bz2
+  tar -vxjf bcftools-1.20.tar.bz2
+  cd bcftools-1.20
+  ./configure --prefix=/opt
+  make
+  make install
+  cd ..
+  
+  wget -q -O - https://get.nextflow.io | bash
+  ./nextflow pull ellieearmstrong/mPCRselect -r main
+  ln -s /opt/nextflow /opt/bin/nextflow
+
+  pip3 install biopython argparse primer3-py pysam xlrd xlsxwriter networkx==1.11 numpy
+  chmod +x NGS_primerplex.py
+  ln -s /opt/NGS_primerplex.py /opt/bin/NGS_primerplex.py
+
+  git clone https://github.com/campanam/baitstools
+  cd baitstools
+  gem build baitstools.gemspec
+  gem install baitstools-1.8.1.gem
+  cd ..
+
+  export R_LIBS_USER=/usr/lib/R/site-library
+
+  R -e 'install.packages(c("tidyverse", "caret", "ggplot2"))'
+  
+%environment
+  export PATH=/opt/bin:$PATH
