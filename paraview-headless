@@ -1,0 +1,12 @@
+Bootstrap: docker
+From: debian:bookworm-slim
+
+%post
+  apt update -y
+  apt install -y libgomp1 curl wget libglu1-mesa-dev freeglut3-dev mesa-common-dev libxcursor*
+  cd /opt
+  wget "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.11&type=binary&os=Linux&downloadFile=ParaView-5.11.0-osmesa-MPI-Linux-Python3.9-x86_64.tar.gz" -O paraview.tar.gz
+  tar xf paraview.tar.gz
+
+%environment
+  export PATH=/opt/ParaView-5.11.0-osmesa-MPI-Linux-Python3.9-x86_64/bin:$PATH
