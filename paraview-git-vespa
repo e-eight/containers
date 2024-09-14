@@ -1,0 +1,28 @@
+Bootstrap: oras
+From: ghcr.io/e-eight/containers/paraview-git:latest
+
+%post
+  apt update -y
+  apt install -y libcgal-dev libeigen3-dev libceres-dev
+
+  export PATH=$PATH:/usr/lib64/openmpi/bin/
+  export vtk_undefined_symbols_allowed=OFF
+
+  cd /opt
+  git clone --recursive https://gitlab.kitware.com/paraview/paraview.git
+  git clone https://gitlab.kitware.com/vtk/meshing/vespa.git
+  mkdir vespa_build
+  cd vespa_build
+  cmake -GNinja -DVESPA_BUILD_PV_PLUGIN=ON -DCMAKE_BUILD_TYPE=Release ../vespa
+  ninja -j 4
+  ninja install
+
+  cd /opt
+  rm -rf paraview vespa
+  apt-get clean && rm -rf /var/bin/apt/lists/*
+
+%environment
+  export PATH=/opt/paraview_build/bin:$PATH
+
+%runscript
+  /opt/paraview_build/bin/paraview
