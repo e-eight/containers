@@ -1,0 +1,33 @@
+Bootstrap: docker
+From: debian:bookworm-slim
+
+%post
+  CHECKM_VER="1.2.3"
+  CHECKM_DB_VER="2015_01_16"
+  PPLACER_VER="v1.1.alpha19"
+  
+  apt update -y
+  apt install -y --no-install-recommends wget unzip hmmer prodigal python3-pip
+  pip install --no-cache-dir --break-system-packages numpy matplotlib pysam checkm-genome==${CHECKM_VER}
+
+  cd /opt
+  wget -q https://github.com/matsen/pplacer/releases/download/${PPLACER_VER}/pplacer-linux-${PPLACER_VER}.zip
+  unzip pplacer-linux-${PPLACER_VER}.zip
+  rm pplacer-linux-${PPLACER_VER}.zip
+  cd ..
+
+  mkdir -p /data/checkm_db
+  wget -q https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_${CHECKM_DB_VER}.tar.gz
+  tar -C /data/checkm_db -xvf checkm_data_${CHECKM_DB_VER}.tar.gz
+  checkm data setRoot /data/checkm_db 
+  rm checkm_data_${CHECKM_DB_VER}.tar.gz
+  
+  apt autoclean
+  rm -rf /var/lib/apt/lists/*
+
+%environment
+  export PATH=$PATH:/opt/pplacer-linux-${PPLACER_VER}
+  export LC_ALL=C
+
+%runscript
+  checkm
